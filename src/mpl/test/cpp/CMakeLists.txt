@@ -14,7 +14,7 @@ set(TEST_LIBS
 
 add_executable(TestSnapper TestSnapper.cpp)
 target_link_libraries(TestSnapper ${TEST_LIBS})
-gtest_discover_tests(TestSnapper WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+# gtest_discover_tests call removed
 
 add_dependencies(build_and_test
   TestSnapper

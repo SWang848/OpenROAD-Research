@@ -185,7 +185,8 @@ class GlobalRouter
   bool isCoveringPin(Net* net, GSegment& segment);
   std::vector<Net*> initFastRoute(int min_routing_layer,
                                   int max_routing_layer,
-                                  bool check_pin_placement = true);
+                                  bool check_pin_placement = true,
+                                  int pin_layer_extension = 2);
   void initFastRouteIncr(std::vector<Net*>& nets);
   // Return GRT layer lengths in dbu's for db_net's route indexed by routing
   // layer.
@@ -195,6 +196,7 @@ class GlobalRouter
   void globalRoute(bool save_guides = false);
   void saveCongestion();
   NetRouteMap& getRoutes();
+  void setRoute(odb::dbNet* db_net, const GRoute& route);
   NetRouteMap getPartialRoutes();
   Net* getNet(odb::dbNet* db_net);
   int getTileSize() const;
@@ -540,6 +542,10 @@ class GlobalRouter
   int skip_large_fanout_{std::numeric_limits<int>::max()};
   bool has_macros_or_pads_{false};
   bool check_pin_placement_{true};
+  // TaiWei accepts pin geometries up to two layers above the configured
+  // routing maximum.  TDP explicitly sets this to zero for its private GRT
+  // initialization; all existing callers retain the default value.
+  int pin_layer_extension_{2};
 
   // Region adjustment variables
   std::vector<RegionAdjustment> region_adjustments_;

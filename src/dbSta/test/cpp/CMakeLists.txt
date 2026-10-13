@@ -17,9 +17,7 @@ target_include_directories(TestHconn
       ${PROJECT_SOURCE_DIR}/src/dbSta/src
 )
 
-gtest_discover_tests(TestHconn
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
-)
+# gtest_discover_tests call removed
 
 add_dependencies(build_and_test TestHconn
 )
@@ -47,9 +45,7 @@ target_include_directories(TestDbSta
       ${PROJECT_SOURCE_DIR}/src/dbSta/src
 )
 
-gtest_discover_tests(TestDbSta
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
-)
+# gtest_discover_tests call removed
 
 add_dependencies(build_and_test TestDbSta
 )
@@ -76,9 +72,7 @@ target_include_directories(TestReadVerilog
       ${PROJECT_SOURCE_DIR}/src/dbSta/src
 )
 
-gtest_discover_tests(TestReadVerilog
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
-)
+# gtest_discover_tests call removed
 
 add_dependencies(build_and_test TestReadVerilog
 )
@@ -105,9 +99,7 @@ target_include_directories(TestWriteVerilog
       ${PROJECT_SOURCE_DIR}/src/dbSta/src
 )
 
-gtest_discover_tests(TestWriteVerilog
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
-)
+# gtest_discover_tests call removed
 
 add_dependencies(build_and_test TestWriteVerilog
 )

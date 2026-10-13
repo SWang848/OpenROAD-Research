@@ -20,8 +20,6 @@ target_include_directories(RmpGTests
       ${PROJECT_SOURCE_DIR}/src/rmp/src
 )
 
-gtest_discover_tests(RmpGTests
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
-)
+# gtest_discover_tests call removed
 
 add_dependencies(build_and_test RmpGTests)

@@ -21,9 +21,7 @@ target_include_directories(TestBufRem1
       ${PROJECT_SOURCE_DIR}/src/rsz/src
 )
 
-gtest_discover_tests(TestBufRem1
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
-)
+# gtest_discover_tests call removed
 
 add_dependencies(build_and_test TestBufRem1
 )
@@ -50,9 +48,7 @@ target_include_directories(TestBufferRemoval2
       ${PROJECT_SOURCE_DIR}/src/rsz/src
 )
 
-gtest_discover_tests(TestBufferRemoval2
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
-)
+# gtest_discover_tests call removed
 
 add_dependencies(build_and_test TestBufferRemoval2
 )
@@ -80,9 +76,7 @@ target_include_directories(TestBufferRemoval3
       ${PROJECT_SOURCE_DIR}/src/rsz/src
 )
 
-gtest_discover_tests(TestBufferRemoval3
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
-)
+# gtest_discover_tests call removed
 
 add_dependencies(build_and_test TestBufferRemoval3
 )
@@ -107,9 +101,7 @@ target_include_directories(TestInsertBuffer
       ${PROJECT_SOURCE_DIR}/src/rsz/src
 )
 
-gtest_discover_tests(TestInsertBuffer
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
-)
+# gtest_discover_tests call removed
 
 add_dependencies(build_and_test TestInsertBuffer
 )

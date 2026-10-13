@@ -272,8 +272,10 @@ add_subdirectory(ppl)
 add_subdirectory(rmp)
 add_subdirectory(cgt)
 add_subdirectory(cts)
+add_subdirectory(3dcts)
 add_subdirectory(cut)
 add_subdirectory(grt)
+add_subdirectory(3ddp)
 add_subdirectory(tap)
 add_subdirectory(rcx)
 add_subdirectory(psm)
@@ -330,6 +332,7 @@ target_link_libraries(openroad
   ord
   gpl
   dpl
+  tdp
   exa
   fin
   ram
@@ -344,6 +347,7 @@ target_link_libraries(openroad
   rmp
   cgt
   cts
+  dcts
   cut
   grt
   tap
@@ -424,6 +428,7 @@ if (Python3_FOUND AND BUILD_PYTHON)
     grt_py
     gpl_py
     dpl_py
+    tdp_py
     exa_py
     ppl_py
     tap_py

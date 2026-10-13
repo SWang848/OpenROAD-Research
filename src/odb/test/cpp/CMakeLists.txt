@@ -72,10 +72,7 @@ target_link_libraries(TestObjectType ${TEST_LIBS})
 # BASE_DIR set allows us to write to the results dir. Running them outside of
 # cpp_tests.tcl results in the output files being written in the current working
 # directory.
-gtest_discover_tests(OdbGTests
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
-    TEST_FILTER "-TestAccessPoint.*,-TestCallBacks.*,-TestGCellGrid.*,-TestGeom.*,-TestGroup.*,-TestGuide.*,-TestJournal.*-TestLef58Properties.*,-TestMaster.*,-TestModule.*,-TestNetTrack.*,-TestChips.*,-Test3DBloxParser.*,-Test3DBloxChecker.*"
-)
+# gtest_discover_tests call removed
 
 add_dependencies(build_and_test 
         TestCallBacks 

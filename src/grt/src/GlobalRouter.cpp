@@ -147,8 +147,10 @@ GlobalRouter::~GlobalRouter()
 
 std::vector<Net*> GlobalRouter::initFastRoute(int min_routing_layer,
                                               int max_routing_layer,
-                                              bool check_pin_placement)
+                                              bool check_pin_placement,
+                                              int pin_layer_extension)
 {
+  pin_layer_extension_ = pin_layer_extension;
   fastroute_->clear();
   h_nets_in_pos_.clear();
   v_nets_in_pos_.clear();
@@ -213,6 +215,14 @@ NetRouteMap& GlobalRouter::getRoutes()
     return partial_routes_;
   }
   return routes_;
+}
+
+void GlobalRouter::setRoute(odb::dbNet* db_net, const GRoute& route)
+{
+  routes_[db_net] = route;
+  if (db_net_map_.find(db_net) == db_net_map_.end() && grid_) {
+    addNet(db_net);
+  }
 }
 
 NetRouteMap GlobalRouter::getPartialRoutes()
@@ -4560,7 +4570,8 @@ void GlobalRouter::makeItermPins(Net* net,
     }
 
     for (auto& layer_boxes : pin_boxes) {
-      if (layer_boxes.first->getRoutingLevel() <= max_routing_layer + 2) { // yjx-TODO
+      if (layer_boxes.first->getRoutingLevel()
+          <= max_routing_layer + pin_layer_extension_) {
         pin_layers.push_back(layer_boxes.first);
       }
     }

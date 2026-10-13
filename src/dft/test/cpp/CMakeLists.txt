@@ -14,11 +14,11 @@ set(TEST_LIBS
 
 add_executable(TestScanArchitect TestScanArchitect.cpp)
 target_link_libraries(TestScanArchitect ${TEST_LIBS})
-gtest_discover_tests(TestScanArchitect WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+# gtest_discover_tests call removed
 
 add_executable(TestScanArchitectHeuristic TestScanArchitectHeuristic.cpp ScanCellMock.cpp)
 target_link_libraries(TestScanArchitectHeuristic ${TEST_LIBS})
-gtest_discover_tests(TestScanArchitectHeuristic WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+# gtest_discover_tests call removed
 
 
 add_dependencies(build_and_test

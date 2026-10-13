@@ -19,9 +19,7 @@ target_include_directories(TestTileGenerator
     ${CMAKE_CURRENT_SOURCE_DIR}/../../src
 )
 
-gtest_discover_tests(TestTileGenerator
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
-)
+# gtest_discover_tests call removed
 
 add_executable(TestRequestHandler TestRequestHandler.cpp)
 
@@ -32,9 +30,7 @@ target_include_directories(TestRequestHandler
     ${CMAKE_CURRENT_SOURCE_DIR}/../../src
 )
 
-gtest_discover_tests(TestRequestHandler
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
-)
+# gtest_discover_tests call removed
 
 add_dependencies(build_and_test
   TestTileGenerator

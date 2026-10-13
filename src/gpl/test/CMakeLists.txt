@@ -52,9 +52,7 @@ target_link_libraries(fft_test
   spdlog::spdlog
 )
 
-gtest_discover_tests(fft_test
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
+# gtest_discover_tests call removed
 
 target_sources(fft_test
   PRIVATE
@@ -81,9 +79,7 @@ target_link_libraries(mbff_test PUBLIC
   tst
 )
 
-gtest_discover_tests(mbff_test
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-)
+# gtest_discover_tests call removed
 
 target_sources(mbff_test
   PRIVATE

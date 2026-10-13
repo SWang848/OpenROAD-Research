@@ -1,0 +1,57 @@
+# Build directories
+build/
+cmake-build-*/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+Makefile
+compile_commands.json
+
+# Compiled output
+*.o
+*.so
+*.a
+*.dylib
+*.dll
+*.swigpyd
+
+# SWIG generated files
+*_wrap.cxx
+*_wrap.h
+*.pyc
+__pycache__/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+# *.pdf
+flame*
+perf.*
+messages.txt
+messages.checked
+*.log
+
+# Large test files
+test/simple/ariane133/ariane_3D.dp.def
+test/simple/ariane133/ariane_3D.dp.v
+test/simple/ariane133/ariane_3D.lg.def
+test/simple/ariane133/ariane_3D.lg.v
+test/simple/asap7_nangate45_3D/ariane133/ariane_3D.dp.def
+test/simple/asap7_nangate45_3D/ariane133/ariane_3D.dp.v
+test/simple/asap7_nangate45_3D/ariane133/ariane_3D.lg.def
+test/simple/asap7_nangate45_3D/ariane133/ariane_3D.lg.v
+test/tech/platforms
+test/opend3d/ariane*
+test/opend3d/hbt_array.json
+test/simple/asap7_nangate45_3D/ariane133_init
+test/

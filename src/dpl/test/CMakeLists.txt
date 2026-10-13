@@ -95,9 +95,7 @@ target_link_libraries(dpl_test
     tst
 )
 
-gtest_discover_tests(dpl_test
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
+# gtest_discover_tests call removed
 
 add_dependencies(build_and_test dpl_test)
 

@@ -26,6 +26,7 @@
 #include "cgt/MakeClockGating.h"
 #include "cts/MakeTritoncts.h"
 #include "cts/TritonCTS.h"
+#include "dcts/Make3DCTS.h"
 #include "db_sta/MakeDbSta.hh"
 #include "db_sta/dbNetwork.hh"
 #include "db_sta/dbReadVerilog.hh"
@@ -34,6 +35,7 @@
 #include "dft/MakeDft.hh"
 #include "dpl/MakeOpendp.h"
 #include "dpl/Opendp.h"
+#include "tdp/MakeTimingdp.h"
 #include "drt/MakeTritonRoute.h"
 #include "drt/TritonRoute.h"
 #include "dst/Distributed.h"
@@ -277,10 +279,12 @@ void OpenRoad::init(Tcl_Interp* tcl_interp,
   gpl::initReplace(tcl_interp);
   gpl::initReplaceGraphics(replace_, logger_);
   dpl::initOpendp(tcl_interp);
+  tdp::initTimingdp(tcl_interp);
   fin::initFinale(tcl_interp);
   ram::initRamGen(tcl_interp);
   grt::initTcl(tcl_interp);
   cts::initTritonCts(tcl_interp);
+  dcts::init3DCTS(tcl_interp);
   tap::initTapcell(tcl_interp);
   mpl::initMacroPlacer(tcl_interp);
   exa::initExample(tcl_interp);

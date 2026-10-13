@@ -77,6 +77,7 @@ class Progress;
   X(STT)                \
   X(TAP)                \
   X(TST)                \
+  X(TDP)                \
   X(UKN)                \
   X(UPF)                \
   X(UTL)                \

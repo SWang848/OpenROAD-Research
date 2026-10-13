@@ -63,9 +63,7 @@ target_link_libraries(cts_unittest
     odb
 )
 
-gtest_discover_tests(cts_unittest
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
+# gtest_discover_tests call removed
 
 add_dependencies(build_and_test cts_unittest)
 

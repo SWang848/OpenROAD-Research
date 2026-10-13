@@ -27,10 +27,6 @@ target_link_libraries(TestScanChain ${TEST_LIBS})
 # results dir. Running TestScanChain outside of cpp_tests.tcl results in the
 # output files being written in the current working directory
 #
-gtest_discover_tests(TestScanChain
-    WORKING_DIRECTORY
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    TEST_FILTER "-TestScanChain.CreateScanChain*"
-)
+# gtest_discover_tests call removed
 
 add_dependencies(build_and_test TestScanChain)

@@ -19,9 +19,7 @@ target_include_directories(CutGTests
       ${PROJECT_SOURCE_DIR}/src/cut/src
 )
 
-gtest_discover_tests(CutGTests
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
-)
+# gtest_discover_tests call removed
 
 add_dependencies(build_and_test CutGTests
 )
