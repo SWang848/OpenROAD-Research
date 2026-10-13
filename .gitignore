@@ -19,6 +19,21 @@ TAGS
 .DS_Store
 .cache
 Makefile
+
+# Source Makefiles required by the integrated source tree
+!docs/Makefile
+!src/rcx/calibration/fasterCap/Makefile
+!src/rcx/test/rcx_v2/FasterCapModel/Makefile
+!src/rcx/test/rcx_v2/Makefile
+!src/rcx/test/rcx_v2/flow/Makefile
+!src/rcx/test/rcx_v2/flow/corners/Makefile
+!src/rcx/test/rcx_v2/model/Makefile
+!subfolder/GKlib/Makefile
+!subfolder/METIS/Makefile
+!subfolder/METIS/test/Makefile
+!third-party/abc/Makefile
+!third-party/abc/src/bdd/cudd/Makefile
+!third-party/abc/src/phys/place/Makefile
 __pycache__
 venv/
 .abc_history
