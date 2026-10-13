@@ -80,6 +80,7 @@ GlobalRouter::GlobalRouter(utl::Logger* logger,
       fastroute_(nullptr),
       cugr_(nullptr),
       grid_origin_(0, 0),
+      gcell_size_(0),
       groute_renderer_(nullptr),
       grid_(new Grid),
       infinite_capacity_(false),
@@ -1533,13 +1534,36 @@ void GlobalRouter::getNetLayerRange(odb::dbNet* db_net,
   }
 
   bool is_non_leaf_clock = isNonLeafClock(db_net);
-  min_layer = (is_non_leaf_clock && getMinLayerForClock() > 0)
-                  ? getMinLayerForClock()
-                  : getMinRoutingLayer();
-  min_layer = std::max(min_layer, pin_min_layer);
+  const int configured_min_layer
+      = (is_non_leaf_clock && getMinLayerForClock() > 0)
+            ? getMinLayerForClock()
+            : getMinRoutingLayer();
   max_layer = (is_non_leaf_clock && getMaxLayerForClock() > 0)
                   ? getMaxLayerForClock()
                   : getMaxRoutingLayer();
+
+  // FastRoute's planar representation requires two adjacent routing layers.
+  // In a face-to-face mirrored stack an upper standard-cell pin (for example
+  // M1_m) can have a routing level above the configured maximum (M2_m). The
+  // pin itself is connected down to max_layer by pin access, while its planar
+  // route must use the highest legal direction pair (M3_m/M2_m). Without this
+  // mapping min_layer can exceed max_layer and getPlanarRoute indexes one past
+  // layer_directions_.
+  if (pin_min_layer >= max_layer) {
+    const int top_pair_min_layer = max_layer - 1;
+    if (top_pair_min_layer < configured_min_layer) {
+      logger_->error(GRT,
+                     312,
+                     "Net {} needs a two-layer routing pair, but the configured "
+                     "range is {}-{}.",
+                     db_net->getConstName(),
+                     configured_min_layer,
+                     max_layer);
+    }
+    min_layer = top_pair_min_layer;
+  } else {
+    min_layer = std::max(configured_min_layer, pin_min_layer);
+  }
 }
 
 void GlobalRouter::getGridSize(int& x_grids, int& y_grids)
@@ -2227,6 +2251,11 @@ void GlobalRouter::setCongestionReportFile(const char* file_name)
 void GlobalRouter::setGridOrigin(int x, int y)
 {
   grid_origin_ = odb::Point(x, y);
+}
+
+void GlobalRouter::setGCellSize(int gcell_size)
+{
+  gcell_size_ = gcell_size;
 }
 
 void GlobalRouter::setAllowCongestion(bool allow_congestion)
@@ -4057,10 +4086,43 @@ void GlobalRouter::initGrid(int max_layer)
   int dx = rect.dx();
   int dy = rect.dy();
 
-  int tile_size = block_->getGCellTileSize();
-
+  int tile_size
+      = gcell_size_ > 0 ? gcell_size_ : block_->getGCellTileSize();
   int x_grids = std::max(1, dx / tile_size);
   int y_grids = std::max(1, dy / tile_size);
+
+  if (gcell_size_ > 0) {
+    logger_->info(GRT, 314, "Using GCell size override: {} DBU.", tile_size);
+  } else if (odb::dbGCellGrid* db_gcell = block_->getGCellGrid();
+             db_gcell != nullptr
+             && db_gcell->getNumGridPatternsX() == 1
+             && db_gcell->getNumGridPatternsY() == 1) {
+    int origin_x;
+    int origin_y;
+    int count_x;
+    int count_y;
+    int step_x;
+    int step_y;
+    db_gcell->getGridPatternX(0, origin_x, count_x, step_x);
+    db_gcell->getGridPatternY(0, origin_y, count_y, step_y);
+
+    // The GCell grid used to create DB guides is persisted in the ODB. It
+    // must be restored when guides are loaded in a later OpenROAD process;
+    // otherwise guide boxes can be decoded with a different tile size and a
+    // one-cell pin/via guide can become a spurious planar wire segment.
+    if (origin_x == rect.xMin() && origin_y == rect.yMin() && count_x > 0
+        && count_y > 0 && step_x > 0 && step_x == step_y) {
+      tile_size = step_x;
+      x_grids = count_x;
+      y_grids = count_y;
+      logger_->info(GRT,
+                    316,
+                    "Restored GCell grid from DB: {} x {} at {} DBU.",
+                    x_grids,
+                    y_grids,
+                    tile_size);
+    }
+  }
 
   bool perfect_regular_x = (x_grids * tile_size) == dx;
   bool perfect_regular_y = (y_grids * tile_size) == dy;

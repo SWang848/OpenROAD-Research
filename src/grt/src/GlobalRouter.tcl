@@ -145,6 +145,7 @@ sta::define_cmd_args "global_route" {[-guide_file out_file] \
                                   [-congestion_report_file file_name] \
                                   [-congestion_report_iter_step steps] \
                                   [-grid_origin origin] \
+                                  [-gcell_size size] \
                                   [-critical_nets_percentage percent] \
                                   [-skip_large_fanout_nets fanout] \
                                   [-allow_congestion] \
@@ -159,7 +160,8 @@ sta::define_cmd_args "global_route" {[-guide_file out_file] \
 proc global_route { args } {
   sta::parse_key_args "global_route" args \
     keys {-guide_file -congestion_iterations -congestion_report_file \
-          -grid_origin -critical_nets_percentage -congestion_report_iter_step\
+          -grid_origin -gcell_size -critical_nets_percentage \
+          -congestion_report_iter_step \
           -skip_large_fanout_nets
          } \
     flags {-allow_congestion -resistance_aware -infinite_cap -verbose -start_incremental \
@@ -189,6 +191,18 @@ proc global_route { args } {
     }
   } else {
     grt::set_grid_origin 0 0
+  }
+
+  if { [info exists keys(-gcell_size)] } {
+    set gcell_size $keys(-gcell_size)
+    sta::check_positive_float "-gcell_size" $gcell_size
+    set gcell_size [ord::microns_to_dbu $gcell_size]
+    if { $gcell_size <= 0 } {
+      utl::error GRT 315 "The GCell size rounds to zero DBU."
+    }
+    grt::set_gcell_size $gcell_size
+  } else {
+    grt::set_gcell_size 0
   }
 
   if { [info exists keys(-congestion_iterations)] } {

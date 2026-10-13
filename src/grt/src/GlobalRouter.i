@@ -99,6 +99,12 @@ set_grid_origin(int x, int y)
 }
 
 void
+set_gcell_size(int gcell_size)
+{
+  getGlobalRouter()->setGCellSize(gcell_size);
+}
+
+void
 set_allow_congestion(bool allowCongestion)
 {
   getGlobalRouter()->setAllowCongestion(allowCongestion);

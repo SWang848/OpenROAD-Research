@@ -794,16 +794,63 @@ void FastRouteCore::incrementEdge3DUsage(int x1,
                                          int y2,
                                          int layer)
 {
+  if (x1 == x2 && y1 == y2) {
+    return;
+  }
+
   const int k = layer - 1;
+  if (k < 0 || k >= num_layers_) {
+    logger_->error(GRT,
+                   317,
+                   "Cannot update edge usage on routing layer {}: valid "
+                   "range is 1-{}.",
+                   layer,
+                   num_layers_);
+  }
 
   if (y1 == y2) {  // horizontal edge
-    for (int x = x1; x < x2; x++) {
+    const auto [begin, end] = std::minmax(x1, x2);
+    if (y1 < 0 || y1 >= y_grid_ || begin < 0 || end >= x_grid_) {
+      logger_->error(GRT,
+                     318,
+                     "Horizontal edge ({}, {})-({}, {}) is outside the {} x "
+                     "{} GCell grid.",
+                     x1,
+                     y1,
+                     x2,
+                     y2,
+                     x_grid_,
+                     y_grid_);
+    }
+    for (int x = begin; x < end; x++) {
       h_edges_3D_[k][y1][x].usage++;
     }
   } else if (x1 == x2) {  // vertical edge
-    for (int y = y1; y < y2; y++) {
+    const auto [begin, end] = std::minmax(y1, y2);
+    if (x1 < 0 || x1 >= x_grid_ || begin < 0 || end >= y_grid_) {
+      logger_->error(GRT,
+                     319,
+                     "Vertical edge ({}, {})-({}, {}) is outside the {} x {} "
+                     "GCell grid.",
+                     x1,
+                     y1,
+                     x2,
+                     y2,
+                     x_grid_,
+                     y_grid_);
+    }
+    for (int y = begin; y < end; y++) {
       v_edges_3D_[k][y][x1].usage++;
     }
+  } else {
+    logger_->error(GRT,
+                   320,
+                   "Cannot update usage for non-Manhattan edge ({}, {})-({}, "
+                   "{}).",
+                   x1,
+                   y1,
+                   x2,
+                   y2);
   }
 }
 
@@ -1064,13 +1111,26 @@ void FastRouteCore::getPlanarRoute(odb::dbNet* db_net, GRoute& route)
       // defines the layer used for horizontal edges are still 2D
       int layer_v = 0;
 
-      if (layer_directions_[nets_[netID]->getMinLayer()]
+      const int min_layer = nets_[netID]->getMinLayer();
+      if (min_layer < 0
+          || min_layer + 1 >= static_cast<int>(layer_directions_.size())) {
+        logger_->error(GRT,
+                       313,
+                       "Net {} has invalid planar routing pair [{}, {}] for {} "
+                       "available layers.",
+                       db_net->getConstName(),
+                       min_layer,
+                       min_layer + 1,
+                       layer_directions_.size());
+      }
+
+      if (layer_directions_[min_layer]
           == odb::dbTechLayerDir::VERTICAL) {
-        layer_h = nets_[netID]->getMinLayer() + 1;
-        layer_v = nets_[netID]->getMinLayer();
+        layer_h = min_layer + 1;
+        layer_v = min_layer;
       } else {
-        layer_h = nets_[netID]->getMinLayer();
-        layer_v = nets_[netID]->getMinLayer() + 1;
+        layer_h = min_layer;
+        layer_v = min_layer + 1;
       }
       int second_x = (tile_size_ * (grids[1].x + 0.5)) + x_corner_;
       int lastL = (lastX == second_x) ? layer_v : layer_h;

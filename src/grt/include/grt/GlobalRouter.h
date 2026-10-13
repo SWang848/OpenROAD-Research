@@ -153,6 +153,7 @@ class GlobalRouter
   void setCongestionReportIterStep(int congestion_report_iter_step);
   void setCongestionReportFile(const char* file_name);
   void setGridOrigin(int x, int y);
+  void setGCellSize(int gcell_size);
   void setAllowCongestion(bool allow_congestion);
   void setResistanceAware(bool resistance_aware);
   void setMacroExtension(int macro_extension);
@@ -516,6 +517,7 @@ class GlobalRouter
   FastRouteCore* fastroute_;
   CUGR* cugr_;
   odb::Point grid_origin_;
+  int gcell_size_;
   std::unique_ptr<AbstractGrouteRenderer> groute_renderer_;
   NetRouteMap routes_;
   NetRouteMap partial_routes_;
