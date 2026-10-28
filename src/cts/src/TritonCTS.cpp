@@ -423,8 +423,10 @@ void TritonCTS::countSinksPostDbWrite(
           if (masterCell) {
             sta::LibertyCell* libCell = network_->libertyCell(masterCell);
             if (libCell) {
-              if (libCell->hasSequentials()) {
-                // Skip non-sink registers
+              // RAMs may use COVER physical masters and a Liberty memory()
+              // group without ff/latch groups. Stop at their logical boundary.
+              if (libCell->hasSequentials() || libCell->isMemory()) {
+                // Skip non-sink sequential cells and memories.
                 terminate = true;
                 trueSink = false;
               }
